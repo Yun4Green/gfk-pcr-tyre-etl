@@ -259,7 +259,7 @@ results = pipeline.run(export_data=True, export_validation=True)
 
 ## 👨‍💻 作者
 
-**Julian Luan** - 数据工程师
+**Julian Luan** - 市场智能专员
 
 - 邮箱: julian.luan@sailun-tyres.eu
 - GitHub: [@julianluan](https://github.com/julianluan)
