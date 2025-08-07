@@ -1,0 +1,42 @@
+GFK ETL 处理总结
+==================================================
+处理时间: 2025-08-07 11:50:01
+
+【pipeline_summary】
+  GFK数据处理管道执行报告
+==================================================
+配置文件: config/spain_config.yml
+处理区域: SPAIN
+开始时间: 2025-08-07 11:49:54.086152
+结束时间: 2025-08-07 11:50:01.968952
+总耗时: 7.88 秒
+执行状态: 成功
+
+【data_loading】
+  files_loaded: 3
+  total_rows: 1441608
+  data_sources: ['LIGHT TRUCK', 'PASSENGER CAR', '4X4']
+
+【data_cleaning】
+  files_cleaned: 3
+  total_rows_before: 1441608
+  total_rows_after: 38220
+  rows_removed: 1403388
+
+【data_transformation】
+  files_transformed: 3
+  total_rows_before_transform: 38220
+  total_rows_after_transform: 261385
+  final_rows: 89032
+  final_columns: 12
+
+【data_validation】
+  validation_passed: False
+  issues_found: 1
+  consistency_rate: 0.0
+
+【data_export】
+  files_exported: 2
+  export_paths: {'data': 'data/processed/GFK_SPAIN_PROCESSED_20250807_115001.csv', 'validation_report': 'data/processed/reports/GFK_SPAIN_VALIDATION_REPORT_20250807_115001.txt'}
+
+

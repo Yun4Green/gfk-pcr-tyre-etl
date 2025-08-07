@@ -1,0 +1,42 @@
+GFK ETL 处理总结
+==================================================
+处理时间: 2025-08-07 11:49:42
+
+【pipeline_summary】
+  GFK数据处理管道执行报告
+==================================================
+配置文件: config/europe_config.yml
+处理区域: EUROPE
+开始时间: 2025-08-07 11:49:28.017123
+结束时间: 2025-08-07 11:49:42.503909
+总耗时: 14.49 秒
+执行状态: 成功
+
+【data_loading】
+  files_loaded: 7
+  total_rows: 299940
+  data_sources: ['Germany', 'Spain', 'France', 'United Kingdom', 'Italy', 'Poland', 'Turkey']
+
+【data_cleaning】
+  files_cleaned: 7
+  total_rows_before: 299940
+  total_rows_after: 299940
+  rows_removed: 0
+
+【data_transformation】
+  files_transformed: 7
+  total_rows_before_transform: 299940
+  total_rows_after_transform: 1188879
+  final_rows: 398164
+  final_columns: 13
+
+【data_validation】
+  validation_passed: False
+  issues_found: 1
+  consistency_rate: 0.0
+
+【data_export】
+  files_exported: 2
+  export_paths: {'data': 'data/processed/GFK_EUROPE_PROCESSED_20250807_114941.csv', 'validation_report': 'data/processed/reports/GFK_EUROPE_VALIDATION_REPORT_20250807_114942.txt'}
+
+

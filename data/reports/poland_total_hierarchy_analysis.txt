@@ -1,0 +1,14 @@
+波兰数据TOTAL层级分析报告
+==================================================
+分析时间: 2025-08-07 13:08:12
+原始文件: data/raw/GFK_FLATFILE_CARTIRE_EUROPE_PL_SAILUN_Jun25.csv
+清洗文件: data/raw/GFK_FLATFILE_CARTIRE_EUROPE_PL_SAILUN_Jun25_cleaned.csv
+
+主要发现:
+1. SALES UNITS TOTAL行数: 378,233
+2. SALES UNITS 明细行数: 14,395
+3. 明细数据总计: 11,825,649
+4. 清洗后数据总计: 11,825,649
+5. 明细与清洗差异: 0
+
+结论: 清洗过程完全正确，明细数据完全一致

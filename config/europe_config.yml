@@ -1,0 +1,36 @@
+# 继承默认配置
+include: "default_config.yml"
+
+# 欧洲数据特定配置
+data_sources:
+  region: "EUROPE"
+  input_directory: "data/raw"
+  output_directory: "data/processed"
+  countries:
+    Germany:
+      code: "DE"
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_DE_SAILUN_Jun25_cleaned.csv"
+    Spain:
+      code: "ES"
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_ES_SAILUN_Jun25_cleaned.csv"
+    France:
+      code: "FR"
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_FR_SAILUN_Jun25_cleaned.csv"
+    "United Kingdom":
+      code: "GB"
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_GB_SAILUN_Jun25_cleaned.csv"
+    Italy:
+      code: "IT"
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_IT_SAILUN_Jun25_cleaned.csv"
+    Poland:
+      code: "PL"
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_PL_SAILUN_Jun25_cleaned.csv"
+    Turkey:
+      code: "TR"
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_TR_SAILUN_Jun25_cleaned.csv"
+
+# 欧洲数据特定的透视配置
+processing:
+  pivot:
+    index_columns: ["Seasonality", "Brandlines", "Rim Diameter", "Dimension", 
+                   "Load Index", "Speed Index", "car_type", "country", "Date"]

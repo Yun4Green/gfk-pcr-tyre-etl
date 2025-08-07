@@ -1,0 +1,66 @@
+project:
+  name: "GFK PCR轮胎市场数据ETL管道"
+  version: "2.0"
+  description: "2025年GFK PCR轮胎数据专用处理库"
+
+data_sources:
+  input_directory: "data/raw"
+  output_directory: "data/processed"
+  
+processing:
+  # 数据清洗配置
+  cleaning:
+    remove_total_rows: true
+    total_patterns: ["\\.TOTAL", "^TOTAL$", "\\.TOTAL\\."]
+    columns_to_drop: ["MAT JUN 24", "MAT JUN 25", "YTD JUN 24", "YTD JUN 25"]
+  
+  # 列映射配置
+  column_mapping:
+    "DIMENSION (Car Tires)": "Dimension"
+    "LoadIndex": "Load Index"
+    "SpeedIndex": "Speed Index"
+    "Type of Vehicle": "car_type"
+    "Fact": "Facts"
+    "TYPE OF VEHICLE": "Type of Vehicle"
+  
+  # 日期配置
+  date_mapping:
+    "JUN 24": "2024-06-01"
+    "JUL 24": "2024-07-01"
+    "AUG 24": "2024-08-01"
+    "SEP 24": "2024-09-01"
+    "OCT 24": "2024-10-01"
+    "NOV 24": "2024-11-01"
+    "DEC 24": "2024-12-01"
+    "JAN 25": "2025-01-01"
+    "FEB 25": "2025-02-01"
+    "MAR 25": "2025-03-01"
+    "APR 25": "2025-04-01"
+    "MAY 25": "2025-05-01"
+    "JUN 25": "2025-06-01"
+  
+  # 透视配置
+  pivot:
+    index_columns: ["Seasonality", "Brandlines", "Rim Diameter", "Dimension", 
+                   "Load Index", "Speed Index", "car_type", "country", "Date"]
+    value_column: "Value"
+    pivot_column: "Facts"
+    
+# 数据验证配置
+validation:
+  consistency_check:
+    enabled: true
+    tolerance: 0.01
+    price_column: "Price EUR"
+    units_column: "Units"
+    value_column: "Value EUR"
+  
+  negative_values:
+    check_enabled: true
+    report_threshold: 10
+
+# 输出配置
+output:
+  filename_pattern: "GFK_{region}_PROCESSED_{timestamp}.csv"
+  include_timestamp: true
+  save_validation_report: true

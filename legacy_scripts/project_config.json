@@ -1,0 +1,159 @@
+{
+  "project_info": {
+    "name": "GFK欧洲汽车轮胎数据ETL管道",
+    "version": "1.0",
+    "created_date": "2025-08-04",
+    "last_updated": "2025-08-06",
+    "description": "处理GFK欧洲汽车轮胎市场销售数据的ETL管道系统"
+  },
+  
+  "data_sources": {
+    "countries": [
+      {"code": "DE", "name": "Germany", "file": "GFK_FLATFILE_CARTIRE_EUROPE_DE_SAILUN_Jun25_cleaned.csv"},
+      {"code": "ES", "name": "Spain", "files": [
+        "GFK_FLATFILE_CARTIRE_EUROPE_ES_SAILUN_Jun25_cleaned.csv",
+        "GFK_FLATFILE_CARTIRE_EUROPE_ES_SAILUN_Jun25_LT.csv",
+        "GFK_FLATFILE_CARTIRE_EUROPE_ES_SAILUN_Jun25_PAS.csv",
+        "GFK_FLATFILE_CARTIRE_EUROPE_ES_SAILUN_Jun25_4*4.csv"
+      ]},
+      {"code": "FR", "name": "France", "file": "GFK_FLATFILE_CARTIRE_EUROPE_FR_SAILUN_Jun25_cleaned.csv"},
+      {"code": "GB", "name": "United Kingdom", "file": "GFK_FLATFILE_CARTIRE_EUROPE_GB_SAILUN_Jun25_cleaned.csv"},
+      {"code": "IT", "name": "Italy", "file": "GFK_FLATFILE_CARTIRE_EUROPE_IT_SAILUN_Jun25_cleaned.csv"},
+      {"code": "PL", "name": "Poland", "file": "GFK_FLATFILE_CARTIRE_EUROPE_PL_SAILUN_Jun25_cleaned.csv"},
+      {"code": "TR", "name": "Turkey", "file": "GFK_FLATFILE_CARTIRE_EUROPE_TR_SAILUN_Jun25_cleaned.csv"}
+    ],
+    "time_range": {
+      "start": "2024-06-01",
+      "end": "2025-06-01",
+      "months": 13
+    },
+    "vehicle_types": ["PASSENGER CAR", "LIGHT TRUCK", "4X4"],
+    "facts_types": ["SALES UNITS", "PRICE EUR", "SALES THS. VALUE EUR"]
+  },
+  
+  "data_structure": {
+    "input_format": "wide",
+    "output_format": "long",
+    "key_dimensions": [
+      "Seasonality",
+      "Brandlines", 
+      "Brand",
+      "Rim Diameter",
+      "Dimension",
+      "Load Index",
+      "Speed Index",
+      "car_type",
+      "country",
+      "Date"
+    ],
+    "metrics": ["PRICE EUR", "SALES THS. VALUE EUR", "SALES UNITS"],
+    "date_columns": [
+      "JUN 24", "JUL 24", "AUG 24", "SEP 24", "OCT 24", "NOV 24", "DEC 24",
+      "JAN 25", "FEB 25", "MAR 25", "APR 25", "MAY 25", "JUN 25"
+    ]
+  },
+  
+  "processing_scripts": {
+    "main_etl": {
+      "script": "process_european_data.py",
+      "description": "主ETL脚本，处理7个欧洲国家数据",
+      "input": "各国cleaned.csv文件",
+      "output": "GFK_CARTIRE_EUROPE_PROCESSED_{timestamp}.csv"
+    },
+    "spain_etl": {
+      "script": "process_spain_data.py", 
+      "description": "西班牙专用ETL脚本，处理3个车型文件",
+      "input": "西班牙LT/PAS/4*4文件",
+      "output": "GFK_SPAIN_CARTIRE_PROCESSED_{timestamp}.csv"
+    },
+    "verification": [
+      {
+        "script": "verify_calculation.py",
+        "purpose": "验证价格计算一致性"
+      },
+      {
+        "script": "analyze_inconsistency.py", 
+        "purpose": "分析数据不一致性问题"
+      },
+      {
+        "script": "trace_negative_to_source.py",
+        "purpose": "追踪负值数据来源"
+      },
+      {
+        "script": "verify_spain_data.py",
+        "purpose": "验证西班牙数据质量"
+      }
+    ]
+  },
+  
+  "data_quality_issues": {
+    "known_problems": [
+      {
+        "issue": "计算不一致",
+        "description": "Price EUR × Units ≠ Value EUR",
+        "consistency_rate": "20-95%",
+        "possible_causes": ["折扣", "税费", "汇率转换", "舍入误差"]
+      },
+      {
+        "issue": "负值数据",
+        "description": "销售单位或价值为负数",
+        "frequency": "少量",
+        "possible_causes": ["退货", "业务调整", "数据修正"]
+      },
+      {
+        "issue": "缺失值",
+        "description": "某些Facts类型数据缺失",
+        "affected_fields": ["SALES THS. VALUE EUR"],
+        "percentage": "10-15%"
+      },
+      {
+        "issue": "TOTAL行污染",
+        "description": "原始数据包含汇总行",
+        "solution": "自动清洗脚本已实现"
+      }
+    ]
+  },
+  
+  "output_files": {
+    "europe_combined": {
+      "pattern": "GFK_CARTIRE_EUROPE_PROCESSED_*.csv",
+      "latest": "GFK_CARTIRE_EUROPE_PROCESSED_20250804_171050.csv",
+      "size_mb": 41.4,
+      "records": "~200k"
+    },
+    "spain_only": {
+      "pattern": "GFK_SPAIN_CARTIRE_PROCESSED_*.csv", 
+      "latest": "GFK_SPAIN_CARTIRE_PROCESSED_20250806_142534.csv",
+      "size_mb": 9.7,
+      "records": 91078
+    }
+  },
+  
+  "usage_guidelines": {
+    "before_analysis": [
+      "运行数据验证脚本",
+      "检查缺失值分布",
+      "了解数据质量问题"
+    ],
+    "best_practices": [
+      "使用长格式数据进行时间序列分析",
+      "注意价格一致性问题",
+      "负值数据需要业务解释",
+      "按国家分组分析质量差异"
+    ],
+    "suitable_analysis": [
+      "时间序列趋势分析",
+      "品牌市场份额分析", 
+      "价格策略分析",
+      "地理市场比较",
+      "车辆类型细分分析"
+    ]
+  },
+  
+  "technical_requirements": {
+    "python_version": "3.x",
+    "dependencies": ["pandas", "numpy"],
+    "memory_requirements": "建议8GB+内存处理大文件",
+    "disk_space": "至少1GB可用空间"
+  }
+} 

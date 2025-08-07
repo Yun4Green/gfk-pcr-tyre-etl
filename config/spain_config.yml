@@ -1,0 +1,27 @@
+# 继承默认配置
+include: "default_config.yml"
+
+# 西班牙数据特定配置
+data_sources:
+  region: "SPAIN"
+  input_directory: "data/raw"
+  output_directory: "data/processed"
+  spain_files:
+    "LIGHT TRUCK":
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_ES_SAILUN_Jun25_LT.csv"
+    "PASSENGER CAR":
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_ES_SAILUN_Jun25_PAS.csv"
+    "4X4":
+      file: "GFK_FLATFILE_CARTIRE_EUROPE_ES_SAILUN_Jun25_4*4.csv"
+
+# 西班牙数据特定的透视配置（包含Brand列）
+processing:
+  pivot:
+    index_columns: ["Seasonality", "Brandlines", "Brand", "Rim Diameter", "Dimension", 
+                   "Load Index", "Speed Index", "car_type", "country", "Date"]
+  
+  # 西班牙数据特定的额外清洗
+  cleaning:
+    remove_total_rows: true
+    total_patterns: ["\\.TOTAL", "^TOTAL$", "\\.TOTAL\\."]
+    columns_to_drop: ["MAT JUN 24", "MAT JUN 25", "YTD JUN 24", "YTD JUN 25"]
